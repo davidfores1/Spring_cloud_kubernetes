@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
+import java.util.List;
 
 
 
@@ -33,8 +35,9 @@ public class Customer {
    private String address; 
    
    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-   private CustomerProduct products;
+   private List<CustomerProduct> products;
    
-   
+   @Transient
+   private List<?>transactions;
    
 }
