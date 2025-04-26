@@ -29,9 +29,10 @@ public class Customer {
    @Id
    private long id;
    private String code;
-   private String iban;
    private String name;
    private String phone; 
+   private String iban;
+   private String surname;
    private String address; 
    
    @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -69,7 +69,10 @@ public class CustomerRestController {
     
     @DeleteMapping("/{id}")
     public ResponseEntity<?> delete(@PathVariable ("id") long id) {
+        Optional<Customer> findById = customerRepository.findById(id);
+        if(findById != null ){
          customerRepository.deleteById(id);
+        }
          return new ResponseEntity<>(HttpStatus.OK);
     }
     
