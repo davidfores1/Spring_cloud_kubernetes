@@ -13,9 +13,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Transient;
 import java.util.List;
-
-
-
 import lombok.Data;
 /**
  *
