@@ -7,6 +7,7 @@ package com.paymentchain.customer.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.paymentchain.customer.entities.Customer;
+import com.paymentchain.customer.entities.CustomerProduct;
 import com.paymentchain.customer.respository.CustomerRepository;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.epoll.EpollChannelOption;
@@ -109,8 +110,19 @@ public class CustomerRestController {
          return new ResponseEntity<>(HttpStatus.OK);
     }
     
+        
+    @GetMapping("/full")
+    public Customer getByCode(@PathVariable String code) {
+        Customer customer = customerRepository.findByCode(code);
+        List<CustomerProduct> products = customer.getProducts();
+        products.forEach(x -> {
+            String productName = getProductName(x.getId());
+            x.setProductName(productName);
+        });
+        return customer;
+    }
+    
         private String getProductName(long id) {
-
         WebClient build = webClientBuilder.clientConnector(new ReactorClientHttpConnector(client))
                 .baseUrl("http://localhost:8082/product")
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
