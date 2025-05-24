@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.netty.http.client.HttpClient;
 
@@ -111,15 +112,17 @@ public class CustomerRestController {
     }
     
         
-    @GetMapping("/full")
-    public Customer getByCode(@PathVariable String code) {
-        Customer customer = customerRepository.findByCode(code);
-        List<CustomerProduct> products = customer.getProducts();
-        products.forEach(x -> {
-            String productName = getProductName(x.getId());
-            x.setProductName(productName);
-        });
-        return customer;
+    @GetMapping("/full/{code}")
+    public Customer getByCode(@RequestParam ("code") String code) {
+
+          Customer customer = customerRepository.findByCode(code);
+          List<CustomerProduct> products = customer.getProducts();
+              products.forEach(x -> {
+              String productName = getProductName(x.getProductId());
+              x.setProductName(productName);
+          });
+          
+          return customer;
     }
     
         private String getProductName(long id) {
