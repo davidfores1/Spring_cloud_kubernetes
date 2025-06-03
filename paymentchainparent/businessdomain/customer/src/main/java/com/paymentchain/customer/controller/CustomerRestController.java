@@ -113,16 +113,19 @@ public class CustomerRestController {
     
         
     @GetMapping("/full/{code}")
-    public Customer getByCode(@RequestParam ("code") String code) {
+    public Customer getByCode(@RequestParam("code") String code) {
 
-          Customer customer = customerRepository.findByCode(code);
-          List<CustomerProduct> products = customer.getProducts();
-              products.forEach(x -> {
-              String productName = getProductName(x.getProductId());
-              x.setProductName(productName);
-          });
-          
-          return customer;
+        Customer customer = customerRepository.findByCode(code);
+        List<CustomerProduct> products = customer.getProducts();
+        products.forEach(x -> {
+            String productName = getProductName(x.getProductId());
+            x.setProductName(productName);
+        });
+
+        List<?> transactions = getTransactions(customer.getIban());
+        customer.setTransactions(transactions);
+
+        return customer;
     }
     
         private String getProductName(long id) {
@@ -138,5 +141,24 @@ public class CustomerRestController {
         String name = block.get("name").asText();
         return name;
     }
-    
+ 
+    private List<?> getTransactions(String iban) {
+        WebClient build = webClientBuilder.clientConnector(new ReactorClientHttpConnector(client))
+                .baseUrl("http://localhost:8083/transaction")
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .build();
+
+        Optional<List<?>> transactionsOptional = Optional.ofNullable(build.method(HttpMethod.GET)
+                .uri(uriBuilder -> uriBuilder
+                .path("/customer/transactions")
+                .queryParam("ibanAccount", iban)
+                .build())
+                .retrieve()
+                .bodyToFlux(Object.class)
+                .collectList()
+                .block());
+
+        return transactionsOptional.orElse(Collections.emptyList());
+    }
+        
 }
