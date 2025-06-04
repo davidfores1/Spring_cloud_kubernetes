@@ -7,7 +7,7 @@ server:
 springdoc:
     swagger-ui:
         path: /swagger-ui.html
-        enabled: true
+        enabled: false
         
 custom: 
     activeprofileName: production
