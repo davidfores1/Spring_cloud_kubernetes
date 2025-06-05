@@ -67,7 +67,7 @@ public class CustomerRestController {
             });
     
 
-    @Value("$custom.activeprofileName=local")
+    @Value("${custom.activeprofileName:local}")
     private String profile;
     
     @GetMapping("check")
