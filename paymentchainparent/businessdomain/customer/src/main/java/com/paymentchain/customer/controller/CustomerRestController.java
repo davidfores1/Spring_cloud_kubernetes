@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,15 @@ public class CustomerRestController {
                 connection.addHandlerLast(new ReadTimeoutHandler(5000, TimeUnit.MILLISECONDS));
                 connection.addHandlerLast(new WriteTimeoutHandler(5000, TimeUnit.MILLISECONDS));
             });
+    
+
+    @Value("$custom.activeprofileName=local")
+    private String profile;
+    
+    @GetMapping("check")
+    public String check(){
+    return "Hello your profile value is: "+ profile;
+    }
     
     
     @GetMapping()
