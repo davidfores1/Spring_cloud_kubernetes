@@ -49,11 +49,14 @@ public class CustomerRestController {
     @Autowired
     CustomerRepository customerRepository;
     
+    @Autowired
     private WebClient.Builder webClientBuilder;
-
-    public CustomerRestController(WebClient.Builder webClientBuilder) {
-        this.webClientBuilder = webClientBuilder;
-    }
+    
+//    private final WebClient.Builder webClientBuilder;
+//
+//    public CustomerRestController(WebClient.Builder webClientBuilder) {
+//        this.webClientBuilder = webClientBuilder;
+//    }
 
     HttpClient client = HttpClient.create()
             .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000)
